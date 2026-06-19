@@ -10,7 +10,7 @@ def test_battery_initialization():
 def test_charging_limits():
     battery = BatteryModel(capacity_mwh=100.0, max_power_mw=50.0, initial_soc=0.9, max_soc=1.0, efficiency=1.0)
     actual_power = battery.step(action_power_mw=-50.0, duration_hours=1.0)
-    assert actual_power == -10.0 # Clipped to 10 MW
+    assert actual_power == pytest.approx(-10.0) # Clipped to 10 MW
     assert battery.soc == 1.0
 
 def test_discharging_limits():

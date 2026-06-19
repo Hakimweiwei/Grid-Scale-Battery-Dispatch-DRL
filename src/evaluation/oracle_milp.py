@@ -18,8 +18,11 @@ class OracleMILP:
         
         solver = pyo.SolverFactory('appsi_highs')
         if not solver.available():
-            logger.warning("HiGHS not available. Trying GLPK...")
+            logger.warning("HiGHS not available. Trying glpk...")
             solver = pyo.SolverFactory('glpk')
+            if not solver.available():
+                logger.warning("No solver available! Install highs or glpk.")
+                return 0.0
             
         model = pyo.ConcreteModel()
         T = len(self.df)
@@ -54,3 +57,7 @@ class OracleMILP:
         
         logger.info(f"Oracle Optimal Profit (1 week): {profit:.2f} AUD")
         return profit
+
+if __name__ == '__main__':
+    oracle = OracleMILP('data/processed/test.parquet', {'power_mw': 50.0, 'capacity_mwh': 100.0, 'efficiency': 0.90})
+    oracle.solve()
