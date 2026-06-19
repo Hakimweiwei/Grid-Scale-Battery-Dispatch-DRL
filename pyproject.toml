@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grid_scale_battery_dispatch_drl"
+version = "0.1.0"
+description = "Grid-Scale Battery Dispatch using Deep Reinforcement Learning"
+authors = [
+    {name = "AI Agent", email = "ai@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas",
+    "pyarrow",
+    "numpy",
+    "gymnasium",
+    "stable-baselines3[extra]",
+    "optuna",
+    "wandb",
+    "plotly",
+    "streamlit",
+    "pyomo",
+    "highspy",
+    "loguru",
+    "pandera"
+]
