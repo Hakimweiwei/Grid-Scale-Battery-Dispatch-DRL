@@ -1,7 +1,7 @@
 import os
 import argparse
 from stable_baselines3 import SAC, PPO
-from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
+from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.monitor import Monitor
 from src.environment.battery_env import BatteryDispatchEnv
@@ -27,7 +27,7 @@ def train(algo="sac", n_envs=4, total_timesteps=1_000_000):
     os.makedirs(f"models/{algo}", exist_ok=True)
     os.makedirs(f"models/scalers", exist_ok=True)
     
-    env = SubprocVecEnv([make_env(config, i) for i in range(n_envs)], start_method='spawn')
+    env = DummyVecEnv([make_env(config, i) for i in range(n_envs)])
     env = VecNormalize(env, norm_obs=True, norm_reward=False, clip_obs=10.)
     
     wandb.init(project="grid_battery_drl", sync_tensorboard=True, monitor_gym=True)
