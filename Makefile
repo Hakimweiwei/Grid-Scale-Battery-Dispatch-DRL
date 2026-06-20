@@ -4,6 +4,9 @@ env:
 	python -m venv .venv
 	.venv\Scripts\pip install -e .
 
+dashboard:
+	.\.venv\Scripts\streamlit run dashboard/app.py
+
 data:
 	.venv\Scripts\python src/data/download_aemo.py
 	.venv\Scripts\python src/data/parse_aemo.py
