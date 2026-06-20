@@ -4,6 +4,9 @@
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import os
+
+os.makedirs('../reports/figures', exist_ok=True)
 
 # Load the data
 df = pd.read_parquet('../data/processed/train.parquet')
@@ -17,11 +20,19 @@ fig_duck = go.Figure()
 fig_duck.add_trace(go.Scatter(x=hourly_profile['hour_of_day'], y=hourly_profile['TOTALDEMAND'], name='Total Demand'))
 fig_duck.add_trace(go.Scatter(x=hourly_profile['hour_of_day'], y=hourly_profile['Net Demand'], name='Net Demand', line=dict(dash='dash')))
 fig_duck.update_layout(title='The Duck Curve: Average Daily Demand Profile', xaxis_title='Hour of Day', yaxis_title='MW')
-# fig_duck.show()
+fig_duck.write_html('../reports/figures/02_duck_curve.html')
+try:
+    fig_duck.write_image('../reports/figures/02_duck_curve.png')
+except ValueError as e:
+    print("Could not write png:", e)
 
 # Average FCAS Prices
 fcas_cols = ['RAISE6SECRRP', 'LOWER6SECRRP', 'RAISE60SECRRP', 'LOWER60SECRRP', 'RAISE5MINRRP', 'LOWER5MINRRP']
 fcas_means = df[fcas_cols].mean().reset_index()
 fcas_means.columns = ['Market', 'Average Price (AUD)']
 fig_fcas = px.bar(fcas_means, x='Market', y='Average Price (AUD)', title='Average FCAS Prices')
-# fig_fcas.show()
+fig_fcas.write_html('../reports/figures/02_fcas_prices.html')
+try:
+    fig_fcas.write_image('../reports/figures/02_fcas_prices.png')
+except ValueError as e:
+    print("Could not write png:", e)
